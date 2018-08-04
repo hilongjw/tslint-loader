@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.5.4
+
+- Add Vue sfc support
+
 ### 3.5.3
 
 Convert legacy rules for Tslint 5,

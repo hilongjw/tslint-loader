@@ -140,4 +140,3 @@ module.exports = function(input, map) {
   lint(this, input, options);
   callback(null, input, map);
 };
-
