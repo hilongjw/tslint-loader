@@ -13,6 +13,7 @@ var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 var objectAssign = require('object-assign');
 var semver = require('semver');
+var vueParser = require('vue-parser');
 
 function resolveFile(configPath) {
   return path.isAbsolute(configPath)
@@ -128,6 +129,8 @@ function writeToFile(fileOutputOpts, result) {
   }
 }
 
+var ScriptTagReg = /<script[\s\S]*?>/
+
 module.exports = function(input, map) {
   this.cacheable && this.cacheable();
   var callback = this.async();
@@ -137,6 +140,12 @@ module.exports = function(input, map) {
   }
 
   var options = resolveOptions(this);
-  lint(this, input, options);
+  if (ScriptTagReg.test(input)) {
+    var _input = vueParser.parse(input, 'script', { lang: ['ts', 'tsx'] });
+    lint(this, _input, options);
+  } else {
+    lint(this, input, options);
+  }
+  
   callback(null, input, map);
 };
